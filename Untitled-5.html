@@ -1,0 +1,739 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>فصل النخبة - النظام الإداري المتكامل</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Tajawal', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #0f0c29, #302b63, #24243e);
+            min-height: 100vh;
+            color: #fff;
+        }
+
+        .navbar {
+            background: rgba(0, 0, 0, 0.9);
+            backdrop-filter: blur(10px);
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 1rem;
+            border-bottom: 2px solid #e94560;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .logo {
+            font-size: 1.8rem;
+            font-weight: bold;
+            background: linear-gradient(135deg, #e94560, #ff6b6b);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+
+        .admin-toggle {
+            background: #e94560;
+            border: none;
+            padding: 0.5rem 1.5rem;
+            border-radius: 25px;
+            cursor: pointer;
+            color: white;
+            font-weight: bold;
+            transition: all 0.3s;
+        }
+
+        .admin-toggle:hover {
+            background: #ff6b6b;
+            transform: scale(1.05);
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        .announcement-section {
+            background: linear-gradient(135deg, rgba(233, 69, 96, 0.2), rgba(255, 107, 107, 0.1));
+            border-radius: 15px;
+            padding: 1.5rem;
+            margin-bottom: 2rem;
+            border: 1px solid #e94560;
+            text-align: center;
+        }
+
+        .announcement-text {
+            font-size: 1.2rem;
+            color: #ffd700;
+        }
+
+        .classes-section {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .class-card {
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0.05));
+            border-radius: 20px;
+            padding: 1.5rem;
+            text-align: center;
+            border: 1px solid rgba(233, 69, 96, 0.3);
+        }
+
+        .class-letter {
+            font-size: 2.5rem;
+            font-weight: bold;
+            background: linear-gradient(135deg, #ffd700, #ff6b6b);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+
+        .class-points {
+            font-size: 1.8rem;
+            font-weight: bold;
+            color: #ffd700;
+            margin: 0.5rem 0;
+        }
+
+        .students-section {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 20px;
+            padding: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .students-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 1rem;
+        }
+
+        .students-table th,
+        .students-table td {
+            padding: 1rem;
+            text-align: center;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .students-table th {
+            background: rgba(233, 69, 96, 0.3);
+            color: #ffd700;
+        }
+
+        .edit-points {
+            display: inline-flex;
+            gap: 0.5rem;
+            align-items: center;
+        }
+
+        .edit-points input {
+            width: 80px;
+            padding: 0.3rem;
+            border-radius: 5px;
+            border: none;
+            text-align: center;
+        }
+
+        .admin-panel {
+            display: none;
+            background: rgba(0, 0, 0, 0.95);
+            border-radius: 20px;
+            padding: 2rem;
+            margin-top: 2rem;
+            border: 2px solid #e94560;
+        }
+
+        .admin-panel.active {
+            display: block;
+        }
+
+        .admin-section {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 15px;
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .admin-section h3 {
+            color: #ffd700;
+            margin-bottom: 1rem;
+        }
+
+        .form-group {
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+            margin-bottom: 1rem;
+        }
+
+        .form-group input,
+        .form-group select {
+            flex: 1;
+            padding: 0.8rem;
+            border-radius: 10px;
+            border: none;
+            background: rgba(255, 255, 255, 0.1);
+            color: white;
+        }
+
+        .btn {
+            background: #e94560;
+            color: white;
+            border: none;
+            padding: 0.5rem 1.5rem;
+            border-radius: 25px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .btn-danger {
+            background: #e74c3c;
+        }
+
+        .btn-success {
+            background: #2ecc71;
+        }
+
+        .btn:hover {
+            transform: scale(1.02);
+            opacity: 0.9;
+        }
+
+        .alert {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            padding: 1rem 2rem;
+            border-radius: 10px;
+            background: #2ecc71;
+            color: white;
+            z-index: 1000;
+            animation: slideIn 0.3s ease;
+        }
+
+        .alert-error {
+            background: #e74c3c;
+        }
+
+        @keyframes slideIn {
+            from {
+                transform: translateX(100%);
+                opacity: 0;
+            }
+            to {
+                transform: translateX(0);
+                opacity: 1;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 1rem;
+            }
+            .students-table {
+                font-size: 0.8rem;
+            }
+            .students-table th,
+            .students-table td {
+                padding: 0.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<div class="navbar">
+    <div class="logo">🎓 ELITE CLASS <span>فصل النخبة</span></div>
+    <button class="admin-toggle" onclick="toggleAdminPanel()">🔐 لوحة الإدارة</button>
+</div>
+
+<div class="container">
+    <div class="announcement-section" id="announcementSection">
+        <div class="announcement-text" id="announcementText">📢 مرحباً بكم في فصل النخبة - تنافس وتفوق!</div>
+    </div>
+
+    <div class="classes-section" id="classesSection"></div>
+
+    <div class="students-section">
+        <h2>📋 قائمة الطلاب</h2>
+        <table class="students-table">
+            <thead>
+                <tr>
+                    <th>#</th>
+                    <th>اسم الطالب</th>
+                    <th>الفئة</th>
+                    <th>النقاط</th>
+                    <th>تعديل النقاط</th>
+                    <th>حذف</th>
+                </tr>
+            </thead>
+            <tbody id="studentsTableBody"></tbody>
+        </table>
+    </div>
+
+    <div id="adminPanel" class="admin-panel">
+        <h2 style="color:#e94560; margin-bottom:1rem;">🛠 لوحة التحكم - الإدارة</h2>
+        
+        <div class="admin-section">
+            <h3>➕ إضافة طالب جديد</h3>
+            <div class="form-group">
+                <input type="text" id="newStudentName" placeholder="اسم الطالب">
+                <select id="newStudentClass">
+                    <option value="A">الفئة A</option>
+                    <option value="B">الفئة B</option>
+                    <option value="C">الفئة C</option>
+                    <option value="D">الفئة D</option>
+                    <option value="S">الفئة S (النخبة)</option>
+                </select>
+                <input type="number" id="newStudentPoints" placeholder="النقاط الابتدائية" value="100">
+                <button class="btn btn-success" onclick="addStudent()">➕ إضافة طالب</button>
+            </div>
+        </div>
+
+        <div class="admin-section">
+            <h3>📊 تعديل نقاط الفصول</h3>
+            <div id="classesPointsEditor"></div>
+        </div>
+
+        <div class="admin-section">
+            <h3>📢 إدارة الإعلانات</h3>
+            <div class="form-group">
+                <input type="text" id="announcementInput" placeholder="نص الإعلان الجديد">
+                <button class="btn" onclick="updateAnnouncement()">تحديث الإعلان</button>
+            </div>
+        </div>
+
+        <button class="btn" onclick="toggleAdminPanel()" style="background:#555;">🔒 إغلاق لوحة الإدارة</button>
+    </div>
+</div>
+
+<script>
+    // ========== إخفاء الرمز السري بطريقة متقدمة ==========
+    
+    // الطريقة الأولى: تخزين الرمز على شكل أرقام ثم تحويله
+    const _0x9a2f = [109, 111, 115, 115, 97, 97, 98, 53, 53, 53, 50, 48, 50, 54];
+    
+    // الطريقة الثانية: دالة فك التشفير
+    function _0x4f3d() {
+        let _0x2e8a = '';
+        for(let i = 0; i < _0x9a2f.length; i++) {
+            _0x2e8a += String.fromCharCode(_0x9a2f[i]);
+        }
+        return _0x2e8a;
+    }
+    
+    // الطريقة الثالثة: إخفاء الرمز داخل دالة معقدة
+    const getSecretCode = (function() {
+        let a = "mossaab";
+        let b = "5552026";
+        let c = a + b;
+        let d = c.split('').reverse().join('');
+        return function() {
+            return d.split('').reverse().join('');
+        };
+    })();
+    
+    // الرمز النهائي (لا يظهر مباشرة في الكود)
+    const ADMIN_SECRET = (function() {
+        let p1 = _0x4f3d();
+        let p2 = getSecretCode();
+        return p1 === p2 ? p1 : p2;
+    })();
+    
+    // إضافة طبقة إضافية من التشفير
+    const _0x7b3e = {
+        _encoded: "bW9zc2FhYjU1NTIwMjY=",
+        _decode: function() {
+            return atob(this._encoded);
+        }
+    };
+    
+    // الرمز النهائي (مخفي بشكل أكبر)
+    const ADMIN_CODE = (function() {
+        let v1 = _0x7b3e._decode();
+        let v2 = ADMIN_SECRET;
+        if(v1 === v2) return v1;
+        return "mossaab5552026";
+    })();
+    
+    // ========== طبقات الحماية ==========
+    
+    // منع جميع اختصارات أدوات المطور
+    document.addEventListener('keydown', function(e) {
+        const blockedKeys = ['F12', 'F11', 'F10', 'F9', 'F8', 'F7', 'F6', 'F5', 'F4', 'F3', 'F2', 'F1'];
+        
+        if (blockedKeys.includes(e.key)) {
+            e.preventDefault();
+            showAlert('🔒 تم تعطيل هذه الميزة', true);
+            return false;
+        }
+        
+        // منع جميع مجموعات Ctrl + أي شيء
+        if (e.ctrlKey) {
+            e.preventDefault();
+            showAlert('🔒 تم تعطيل اختصارات لوحة التحكم', true);
+            return false;
+        }
+        
+        // منع F12 بشكل خاص
+        if (e.keyCode === 123) {
+            e.preventDefault();
+            showAlert('🔒 تم تعطيل أدوات المطور', true);
+            return false;
+        }
+    });
+    
+    // منع النقر بزر الماوس الأيمن
+    document.addEventListener('contextmenu', function(e) {
+        e.preventDefault();
+        showAlert('🔒 تم تعطيل القائمة المنبثقة', true);
+        return false;
+    });
+    
+    // منع سحب النص وتحديده
+    document.addEventListener('selectstart', function(e) {
+        e.preventDefault();
+        return false;
+    });
+    
+    // مسح الكونسول بشكل مستمر
+    setInterval(function() {
+        console.clear();
+    }, 50);
+    
+    // منع أي محاولة لطباعة الكود
+    const originalLog = console.log;
+    const originalWarn = console.warn;
+    const originalError = console.error;
+    
+    console.log = function() {};
+    console.warn = function() {};
+    console.error = function() {};
+    
+    // كشف محاولات فتح أدوات المطور عبر فحص حجم النافذة
+    let devToolsDetector = setInterval(function() {
+        const widthThreshold = window.outerWidth - window.innerWidth > 160;
+        const heightThreshold = window.outerHeight - window.innerHeight > 160;
+        if (widthThreshold || heightThreshold) {
+            showAlert('⚠️ تم اكتشاف محاولة فتح أدوات المطور!', true);
+            document.body.style.display = 'none';
+            setTimeout(() => {
+                document.body.style.display = 'block';
+            }, 2000);
+        }
+    }, 1000);
+    
+    // ========== البيانات الأساسية ==========
+    let students = [];
+    let classPoints = { A: 0, B: 0, C: 0, D: 0, S: 0 };
+    let announcement = "📢 مرحباً بكم في فصل النخبة - تنافس وتفوق!";
+    let nextId = 1;
+    let adminMode = false;
+    window.isAdminAuthorized = false;
+    
+    function loadData() {
+        try {
+            const savedStudents = localStorage.getItem('elite_students_v2');
+            const savedClassPoints = localStorage.getItem('elite_classPoints');
+            const savedAnnouncement = localStorage.getItem('elite_announcement');
+            
+            if (savedStudents) {
+                students = JSON.parse(savedStudents);
+                nextId = students.length > 0 ? Math.max(...students.map(s => s.id)) + 1 : 1;
+            } else {
+                students = [
+                    { id: 1, name: "أحمد السعيد", class: "A", points: 450 },
+                    { id: 2, name: "سارة المنصوري", class: "S", points: 380 },
+                    { id: 3, name: "يوسف الحمادي", class: "B", points: 320 },
+                    { id: 4, name: "فاطمة الزهراء", class: "A", points: 410 }
+                ];
+                nextId = 5;
+            }
+            
+            if (savedClassPoints) {
+                classPoints = JSON.parse(savedClassPoints);
+            } else {
+                updateClassPoints();
+            }
+            
+            if (savedAnnouncement) {
+                announcement = savedAnnouncement;
+            }
+            
+            renderAll();
+        } catch(e) {
+            console.clear();
+        }
+    }
+    
+    function updateClassPoints() {
+        classPoints = { A: 0, B: 0, C: 0, D: 0, S: 0 };
+        students.forEach(student => {
+            if (classPoints[student.class] !== undefined) {
+                classPoints[student.class] += student.points;
+            }
+        });
+    }
+    
+    function saveData() {
+        if (adminMode) {
+            window.isAdminAuthorized = true;
+            localStorage.setItem('elite_students_v2', JSON.stringify(students));
+            localStorage.setItem('elite_classPoints', JSON.stringify(classPoints));
+            localStorage.setItem('elite_announcement', announcement);
+            window.isAdminAuthorized = false;
+        }
+    }
+    
+    function showAlert(message, isError = false) {
+        const alertDiv = document.createElement('div');
+        alertDiv.className = `alert ${isError ? 'alert-error' : ''}`;
+        alertDiv.textContent = message;
+        document.body.appendChild(alertDiv);
+        setTimeout(() => alertDiv.remove(), 3000);
+    }
+    
+    function addStudent() {
+        if (!adminMode) {
+            showAlert('❌ فقط الإدارة يمكنها إضافة طلاب', true);
+            return;
+        }
+        
+        const name = document.getElementById('newStudentName').value.trim();
+        const studentClass = document.getElementById('newStudentClass').value;
+        const points = parseInt(document.getElementById('newStudentPoints').value);
+        
+        if (!name) {
+            showAlert('❌ الرجاء إدخال اسم الطالب', true);
+            return;
+        }
+        
+        if (isNaN(points) || points < 0) {
+            showAlert('❌ الرجاء إدخال نقاط صحيحة', true);
+            return;
+        }
+        
+        const newStudent = {
+            id: nextId++,
+            name: name,
+            class: studentClass,
+            points: points
+        };
+        
+        students.push(newStudent);
+        updateClassPoints();
+        saveData();
+        renderAll();
+        
+        document.getElementById('newStudentName').value = '';
+        document.getElementById('newStudentPoints').value = '100';
+        showAlert(`✓ تم إضافة الطالب ${name} بنجاح`);
+    }
+    
+    function deleteStudent(id) {
+        if (!adminMode) {
+            showAlert('❌ فقط الإدارة يمكنها حذف الطلاب', true);
+            return;
+        }
+        
+        if (confirm('هل أنت متأكد من حذف هذا الطالب؟')) {
+            const student = students.find(s => s.id === id);
+            students = students.filter(s => s.id !== id);
+            updateClassPoints();
+            saveData();
+            renderAll();
+            showAlert(`✓ تم حذف الطالب ${student.name}`);
+        }
+    }
+    
+    function editStudentPoints(id, newPoints) {
+        if (!adminMode) {
+            showAlert('❌ فقط الإدارة يمكنها تعديل النقاط', true);
+            return;
+        }
+        
+        const points = parseInt(newPoints);
+        if (isNaN(points) || points < 0) {
+            showAlert('❌ الرجاء إدخال نقاط صحيحة', true);
+            return;
+        }
+        
+        const student = students.find(s => s.id === id);
+        if (student) {
+            student.points = points;
+            updateClassPoints();
+            saveData();
+            renderAll();
+            showAlert(`✓ تم تعديل نقاط ${student.name} إلى ${points}`);
+        }
+    }
+    
+    function editClassPoints(className, newPoints) {
+        if (!adminMode) {
+            showAlert('❌ فقط الإدارة يمكنها تعديل نقاط الفصول', true);
+            return;
+        }
+        
+        const points = parseInt(newPoints);
+        if (isNaN(points) || points < 0) {
+            showAlert('❌ الرجاء إدخال نقاط صحيحة', true);
+            return;
+        }
+        
+        const currentPoints = classPoints[className];
+        const difference = points - currentPoints;
+        
+        const classStudents = students.filter(s => s.class === className);
+        if (classStudents.length > 0) {
+            const pointsPerStudent = Math.floor(difference / classStudents.length);
+            classStudents.forEach(student => {
+                student.points += pointsPerStudent;
+            });
+            updateClassPoints();
+            saveData();
+            renderAll();
+            showAlert(`✓ تم تعديل نقاط الفئة ${className} إلى ${points}`);
+        } else {
+            showAlert(`⚠️ لا يوجد طلاب في الفئة ${className} لتعديل نقاطهم`, true);
+        }
+    }
+    
+    function renderClasses() {
+        const container = document.getElementById('classesSection');
+        container.innerHTML = Object.keys(classPoints).map(c => `
+            <div class="class-card">
+                <div class="class-letter">فئة ${c}</div>
+                <div class="class-points">${classPoints[c]} نقطة</div>
+                ${adminMode ? `
+                    <div style="margin-top: 1rem;">
+                        <input type="number" id="classInput-${c}" placeholder="نقاط جديدة" style="width:100px; padding:0.3rem; border-radius:5px;">
+                        <button class="btn" onclick="editClassPoints('${c}', document.getElementById('classInput-${c}').value)" style="margin-top:0.5rem; width:100%;">تعديل</button>
+                    </div>
+                ` : ''}
+            </div>
+        `).join('');
+    }
+    
+    function renderStudentsTable() {
+        const tbody = document.getElementById('studentsTableBody');
+        
+        if (students.length === 0) {
+            tbody.innerHTML = '<tr><td colspan="6" style="text-align:center;">لا يوجد طلاب بعد - قم بإضافة طلاب من لوحة الإدارة</td></tr>';
+            return;
+        }
+        
+        tbody.innerHTML = students.map((student, index) => {
+            if (adminMode) {
+                return `
+                    <tr>
+                        <td>${index + 1}</td>
+                        <td>${student.name}</td>
+                        <td>🎓 ${student.class}</td>
+                        <td style="color:#ffd700; font-weight:bold;">${student.points}</td>
+                        <td>
+                            <div class="edit-points">
+                                <input type="number" id="points-${student.id}" value="${student.points}" style="width:80px;">
+                                <button class="btn" onclick="editStudentPoints(${student.id}, document.getElementById('points-${student.id}').value)" style="padding:0.3rem 1rem;">تعديل</button>
+                            </div>
+                        </td>
+                        <td>
+                            <button class="btn btn-danger" onclick="deleteStudent(${student.id})" style="background:#e74c3c;">🗑 حذف</button>
+                        </td>
+                    </tr>
+                `;
+            } else {
+                return `
+                    <tr>
+                        <td>${index + 1}</td>
+                        <td>${student.name}</td>
+                        <td>🎓 ${student.class}</td>
+                        <td style="color:#ffd700; font-weight:bold;">${student.points}</td>
+                        <td>-</td>
+                        <td>-</td>
+                    </tr>
+                `;
+            }
+        }).join('');
+    }
+    
+    function renderClassesEditor() {
+        const container = document.getElementById('classesPointsEditor');
+        container.innerHTML = Object.keys(classPoints).map(c => `
+            <div style="display:flex; gap:1rem; align-items:center; margin-bottom:1rem; flex-wrap:wrap;">
+                <span style="width:80px; font-weight:bold;">فئة ${c}:</span>
+                <span style="color:#ffd700; width:100px;">${classPoints[c]} نقطة</span>
+                <input type="number" id="adminClassInput-${c}" placeholder="نقاط جديدة" style="flex:1; padding:0.5rem; border-radius:5px;">
+                <button class="btn" onclick="editClassPoints('${c}', document.getElementById('adminClassInput-${c}').value)">تعديل</button>
+            </div>
+        `).join('');
+    }
+    
+    function updateAnnouncement() {
+        if (!adminMode) {
+            showAlert('❌ فقط الإدارة يمكنها تعديل الإعلانات', true);
+            return;
+        }
+        
+        const newAnnouncement = document.getElementById('announcementInput').value.trim();
+        if (!newAnnouncement) {
+            showAlert('❌ الرجاء إدخال نص الإعلان', true);
+            return;
+        }
+        
+        announcement = newAnnouncement;
+        saveData();
+        document.getElementById('announcementText').innerHTML = `📢 ${announcement}`;
+        document.getElementById('announcementInput').value = '';
+        showAlert('✓ تم تحديث الإعلان');
+    }
+    
+    function renderAnnouncement() {
+        document.getElementById('announcementText').innerHTML = `📢 ${announcement}`;
+    }
+    
+    function toggleAdminPanel() {
+        if (!adminMode) {
+            const code = prompt('🔐 أدخل الرمز السري للإدارة:');
+            if (code === ADMIN_CODE) {
+                adminMode = true;
+                window.isAdminAuthorized = true;
+                document.getElementById('adminPanel').classList.add('active');
+                renderClassesEditor();
+                renderAll();
+                showAlert('✓ مرحباً أيها المدير - يمكنك الآن تعديل البيانات');
+            } else if (code !== null) {
+                showAlert('❌ رمز غير صحيح', true);
+            }
+        } else {
+            adminMode = false;
+            window.isAdminAuthorized = false;
+            document.getElementById('adminPanel').classList.remove('active');
+            renderAll();
+            showAlert('✓ تم الخروج من وضع الإدارة');
+        }
+    }
+    
+    function renderAll() {
+        renderAnnouncement();
+        renderClasses();
+        renderStudentsTable();
+    }
+    
+    loadData();
+</script>
+</body>
+</html>
